@@ -134,21 +134,21 @@ export class AppService {
       const currentTime = moment.tz("Asia/Taipei").format('YYYY_MM_DD_mm_ss')
       this.logger.debug(`Start ${currentTime} job`);
 
-      const oldRecords = await this.getOldSpaceRecord()
+      let oldRecords = await this.getOldSpaceRecord()
       const newRecords = await this.getSpaceRecord()
   
       // remove duplicate records------------------------------
-      let lastRecord = oldRecords[oldRecords.length - 1]
-      newRecords.map(e=>{
-        if(e.confirmationBlock > lastRecord.confirmationBlock){
-          oldRecords.push(e)
-        }
-      })
-  
-      let dir='public'
-      if(!fs.existsSync(dir)){
-        fs.mkdirSync(dir, { recursive: true })
+      if(oldRecords.length > 0){
+        let lastRecord = oldRecords[oldRecords.length - 1]
+        newRecords.map(e=>{
+          if(e.confirmationBlock > lastRecord.confirmationBlock){
+            oldRecords.push(e)
+          }
+        })
+      }else{
+        oldRecords = newRecords
       }
+ 
       //---------------------------------------------------------
 
       

@@ -127,7 +127,7 @@ export class AppService {
     }
   }
 
-  @Cron('*/10 * * * * *')
+  @Cron('* * */12 * * *')
   async handleCron() {
 
     try {
